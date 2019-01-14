@@ -2,6 +2,12 @@
 
 An analog watch face with a binary twist, set in a material design
 
+<a href="https://play.google.com/store/apps/details?id=com.vorsk.binaryanalog">
+    <img alt="Get it on Google Play"
+        height="80"
+        src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" />
+</a>
+
 Inspired by [Anthony Liekens's](http://anthony.liekens.net/) [Analog Binary Wall Clock](http://anthony.liekens.net/static/analogbinaryclock.html)
 
 ## Features
