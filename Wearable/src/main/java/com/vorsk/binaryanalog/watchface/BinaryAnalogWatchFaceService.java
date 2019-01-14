@@ -528,6 +528,22 @@ public class BinaryAnalogWatchFaceService extends CanvasWatchFaceService {
             return binaryPaint;
         }
 
+        private void drawBinaryLine(Canvas canvas, float startX, float startY, int num, int bits) {
+            Paint[] bitPaints = getBinaryPaint(num, bits);
+            final float binaryRadius = mBinarySegmentSize / 2;
+
+            // shadow line
+            canvas.drawLine(startX, startY, startX,startY - (bits * mBinarySegmentSize), mWatchHandShadowLinePaint);
+
+            for (int i = 0; i < bits; i++) {
+                canvas.drawRect(startX - binaryRadius,
+                        startY - mBinarySegmentSize * i,
+                        startX + binaryRadius,
+                        startY - mBinarySegmentSize * (i+1),
+                        bitPaints[i]);
+            }
+        }
+
         private void drawWatchHands(Canvas canvas) {
             /*
              * These calculations reflect the rotation in degrees per unit of time, e.g.,
@@ -541,11 +557,6 @@ public class BinaryAnalogWatchFaceService extends CanvasWatchFaceService {
             final int hour = mCalendar.get(Calendar.HOUR);
             final float hoursRotation = (hour * 30) + hourHandOffset;
 
-            final float binaryRadius = mBinarySegmentSize / 2;
-
-            Paint[] hourBitPaints = getBinaryPaint(hour, 4);
-            Paint[] minuteBitPaints = getBinaryPaint(minute, 6);
-
             /*
              * Save the canvas state before we can begin to rotate it.
              */
@@ -553,84 +564,11 @@ public class BinaryAnalogWatchFaceService extends CanvasWatchFaceService {
 
             // hours
             canvas.rotate(hoursRotation, mCenterX, mCenterY);
-            canvas.drawLine(
-                    mCenterX,
-                    mCenterY - CENTER_COMPLICATION_CIRCLE_RADIUS,
-                    mCenterX,
-                    mCenterY - CENTER_HOUR_CIRCLE_RADIUS,
-                    mWatchHandShadowLinePaint);
-
-            // hour bits
-            canvas.drawRect(mCenterX - binaryRadius,
-                    mCenterY - CENTER_COMPLICATION_CIRCLE_RADIUS,
-                    mCenterX + binaryRadius,
-                    mCenterY - CENTER_COMPLICATION_CIRCLE_RADIUS - mBinarySegmentSize,
-                    hourBitPaints[0]);
-
-            canvas.drawRect(mCenterX - binaryRadius,
-                    mCenterY - CENTER_COMPLICATION_CIRCLE_RADIUS - mBinarySegmentSize,
-                    mCenterX + binaryRadius,
-                    mCenterY - CENTER_COMPLICATION_CIRCLE_RADIUS - mBinarySegmentSize * 2,
-                    hourBitPaints[1]);
-
-            canvas.drawRect(mCenterX - binaryRadius,
-                    mCenterY - CENTER_COMPLICATION_CIRCLE_RADIUS - mBinarySegmentSize * 2,
-                    mCenterX + binaryRadius,
-                    mCenterY - CENTER_COMPLICATION_CIRCLE_RADIUS - mBinarySegmentSize * 3,
-                    hourBitPaints[2]);
-
-            canvas.drawRect(mCenterX - binaryRadius,
-                    mCenterY - CENTER_COMPLICATION_CIRCLE_RADIUS - mBinarySegmentSize * 3,
-                    mCenterX + binaryRadius,
-                    mCenterY - CENTER_COMPLICATION_CIRCLE_RADIUS - mBinarySegmentSize * 4,
-                    hourBitPaints[3]);
+            drawBinaryLine(canvas, mCenterX, mCenterY - CENTER_COMPLICATION_CIRCLE_RADIUS, hour, 4);
 
             // minutes
             canvas.rotate(minutesRotation - hoursRotation, mCenterX, mCenterY);
-            canvas.drawLine(
-                    mCenterX,
-                    mCenterY - CENTER_HOUR_CIRCLE_RADIUS,
-                    mCenterX,
-                    0,
-                    mWatchHandShadowLinePaint);
-
-            // minute bits
-            canvas.drawRect(mCenterX - binaryRadius,
-                    mCenterY - CENTER_HOUR_CIRCLE_RADIUS,
-                    mCenterX + binaryRadius,
-                    mCenterY - CENTER_HOUR_CIRCLE_RADIUS - mBinarySegmentSize,
-                    minuteBitPaints[0]);
-
-            canvas.drawRect(mCenterX - binaryRadius,
-                    mCenterY - CENTER_HOUR_CIRCLE_RADIUS - mBinarySegmentSize,
-                    mCenterX + binaryRadius,
-                    mCenterY - CENTER_HOUR_CIRCLE_RADIUS - mBinarySegmentSize * 2,
-                    minuteBitPaints[1]);
-
-            canvas.drawRect(mCenterX - binaryRadius,
-                    mCenterY - CENTER_HOUR_CIRCLE_RADIUS - mBinarySegmentSize * 2,
-                    mCenterX + binaryRadius,
-                    mCenterY - CENTER_HOUR_CIRCLE_RADIUS - mBinarySegmentSize * 3,
-                    minuteBitPaints[2]);
-
-            canvas.drawRect(mCenterX - binaryRadius,
-                    mCenterY - CENTER_HOUR_CIRCLE_RADIUS - mBinarySegmentSize * 3,
-                    mCenterX + binaryRadius,
-                    mCenterY - CENTER_HOUR_CIRCLE_RADIUS - mBinarySegmentSize * 4,
-                    minuteBitPaints[3]);
-
-            canvas.drawRect(mCenterX - binaryRadius,
-                    mCenterY - CENTER_HOUR_CIRCLE_RADIUS - mBinarySegmentSize * 4,
-                    mCenterX + binaryRadius,
-                    mCenterY - CENTER_HOUR_CIRCLE_RADIUS - mBinarySegmentSize * 5,
-                    minuteBitPaints[4]);
-
-            canvas.drawRect(mCenterX - binaryRadius,
-                    mCenterY - CENTER_HOUR_CIRCLE_RADIUS - mBinarySegmentSize * 5,
-                    mCenterX + binaryRadius,
-                    mCenterY - CENTER_HOUR_CIRCLE_RADIUS - mBinarySegmentSize * 6,
-                    minuteBitPaints[5]);
-
+            drawBinaryLine(canvas, mCenterX, mCenterY - CENTER_HOUR_CIRCLE_RADIUS, minute, 6);
 
             /* Restore the canvas' original orientation. */
             canvas.restore();
