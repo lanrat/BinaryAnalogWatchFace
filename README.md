@@ -12,8 +12,13 @@ Inspired by [Anthony Liekens's](http://anthony.liekens.net/) [Analog Binary Wall
 
 ## [Screenshots](Screenshots/)
 
+![BinaryAnalogWatchface](Screenshots/BinaryAnalog6.png)
+
 ![BinaryAnalogWatchface](Screenshots/BinaryAnalog2.png)
+
+![BinaryAnalogWatchface](Screenshots/BinaryAnalog5.png)
+
+![BinaryAnalogWatchface](Screenshots/BinaryAnalog1.png)
 
 ![BinaryAnalogWatchface Ambient](Screenshots/BinaryAnalog3.png)
 
-![BinaryAnalogWatchface](Screenshots/BinaryAnalog5.png)
