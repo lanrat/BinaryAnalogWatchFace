@@ -1,0 +1,15 @@
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="app_name">Binary Analog Watch Face</string>
+    <string name="watchface_name">Binary Analog</string>
+
+    <!-- Use of "\n" is to conserve horizontal space in config_list menu. -->
+    <string name="config_background_color_label">Background\nColor</string>
+
+    <string name="saved_background_color">saved_background_color</string>
+
+    <string name="preference_file_key">com.vorsk.binaryanalog.PREFERENCE_FILE_KEY</string>
+
+    <string name="complication_config">Configure Watch Face Complications</string>
+    <string name="edit_complication">Edit Complication <xliff:g example="World Clock" id="name">%1$s</xliff:g></string>
+    <string name="add_complication">Add Complication</string>
+</resources>
