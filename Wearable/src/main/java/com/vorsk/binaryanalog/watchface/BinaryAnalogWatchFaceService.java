@@ -132,11 +132,10 @@ public class BinaryAnalogWatchFaceService extends CanvasWatchFaceService {
         private int mWatchBinary0Color;
         private int mWatchBinary1Color;
 
-        private Paint mBinaryHand1Paint;
-        private Paint mBinaryHand0Paint;
+        private Paint mBinary1Paint;
+        private Paint mBinary0Paint;
         private Paint mBackgroundInnerPaint;
         private Paint mBackgroundOuterPaint;
-        //private Paint mWatchHandShadowLinePaint;
         private MaterialColors.Color mBackgroundMaterialColor;
 
         private boolean mLowBitAmbient;
@@ -218,12 +217,11 @@ public class BinaryAnalogWatchFaceService extends CanvasWatchFaceService {
 
             mIsBackgroundDark = MaterialColors.isColorDark(mBackgroundOuterColor);
 
-            // TODO material
-            mWatchBinary1Color = Color.BLACK;
-            mWatchBinary0Color = Color.WHITE;
+            mWatchBinary1Color = getApplicationContext().getColor(R.color.binaryBit1);
+            mWatchBinary0Color = getApplicationContext().getColor(R.color.binaryBit0);
 
             // this is not ideal with black hands on dark background, but changing it to white looks worse
-            mWatchHandShadowColor = Color.BLACK;
+            mWatchHandShadowColor = getApplicationContext().getColor(R.color.bitsShadow);
         }
 
         private void initializeComplications() {
@@ -254,26 +252,15 @@ public class BinaryAnalogWatchFaceService extends CanvasWatchFaceService {
         }
 
         private void initializeWatchFace() {
-            mBinaryHand1Paint = new Paint();
-            mBinaryHand1Paint.setColor(mWatchBinary1Color);
-            //mBinaryHand1Paint.setStrokeWidth(HAND_STROKE_WIDTH);
-            mBinaryHand1Paint.setAntiAlias(true);
-            mBinaryHand1Paint.setStrokeCap(Paint.Cap.BUTT);
-            //mBinaryHand1Paint.setShadowLayer(SHADOW_RADIUS, 0, 0, mWatchHandShadowColor);
+            mBinary1Paint = new Paint();
+            mBinary1Paint.setColor(mWatchBinary1Color);
+            mBinary1Paint.setAntiAlias(true);
+            mBinary1Paint.setStrokeCap(Paint.Cap.BUTT);
 
-            mBinaryHand0Paint = new Paint();
-            mBinaryHand0Paint.setColor(mWatchBinary0Color);
-            //mBinaryHand0Paint.setStrokeWidth(HAND_STROKE_WIDTH);
-            mBinaryHand0Paint.setAntiAlias(true);
-            mBinaryHand0Paint.setStrokeCap(Paint.Cap.BUTT);
-            //mBinaryHand0Paint.setShadowLayer(SHADOW_RADIUS, 0, 0, mWatchHandShadowColor);
-
-            /*mWatchHandShadowLinePaint = new Paint();
-            mWatchHandShadowLinePaint.setColor(Color.GRAY); // covered by binary lines
-            mWatchHandShadowLinePaint.setStrokeWidth(mBinarySegmentSize);
-            mWatchHandShadowLinePaint.setAntiAlias(true);
-            mWatchHandShadowLinePaint.setStrokeCap(Paint.Cap.BUTT);
-            mWatchHandShadowLinePaint.setShadowLayer(SHADOW_RADIUS, 0, 0, mWatchHandShadowColor);*/
+            mBinary0Paint = new Paint();
+            mBinary0Paint.setColor(mWatchBinary0Color);
+            mBinary0Paint.setAntiAlias(true);
+            mBinary0Paint.setStrokeCap(Paint.Cap.BUTT);
         }
 
         /* Sets active/ambient mode colors for all complications.
@@ -289,12 +276,19 @@ public class BinaryAnalogWatchFaceService extends CanvasWatchFaceService {
             for (int complicationId : COMPLICATION_IDS) {
                 complicationDrawable = mComplicationDrawableSparseArray.get(complicationId);
                 if (mIsBackgroundDark) {
-                    // TODO revisit these colors and use material
-                    complicationDrawable.setTextColorActive(Color.WHITE);
-                    complicationDrawable.setTitleColorActive(Color.WHITE);
+                    int primaryColor = getApplicationContext().getColor(R.color.complicationLightPrimary);
+                    int SecondaryColor = getApplicationContext().getColor(R.color.complicationLightSecondary);
+                    complicationDrawable.setTextColorActive(primaryColor);
+                    complicationDrawable.setTitleColorActive(SecondaryColor);
+                    complicationDrawable.setIconColorActive(SecondaryColor);
+                    complicationDrawable.setRangedValuePrimaryColorActive(primaryColor);
                 } else {
-                    complicationDrawable.setTextColorActive(Color.BLACK);
-                    complicationDrawable.setTitleColorActive(Color.BLACK);
+                    int primaryColor = getApplicationContext().getColor(R.color.complicationDarkPrimary);
+                    int SecondaryColor = getApplicationContext().getColor(R.color.complicationDarkSecondary);
+                    complicationDrawable.setTextColorActive(primaryColor);
+                    complicationDrawable.setTitleColorActive(SecondaryColor);
+                    complicationDrawable.setIconColorActive(SecondaryColor);
+                    complicationDrawable.setRangedValuePrimaryColorActive(primaryColor);
                 }
 
             }
@@ -402,33 +396,29 @@ public class BinaryAnalogWatchFaceService extends CanvasWatchFaceService {
             if (mAmbient) {
                 mBackgroundInnerPaint.setColor(Color.BLACK);
                 mBackgroundOuterPaint.setColor(Color.BLACK);
-                mBinaryHand1Paint.setColor(getApplicationContext().getColor(R.color.dark_grey));
-                //mBinaryHand0Paint.setColor(Color.WHITE);
+                mBinary0Paint.setColor(getApplicationContext().getColor(R.color.binaryBit0Ambient));
+                mBinary1Paint.setColor(getApplicationContext().getColor(R.color.binaryBit1Ambient));
 
-                mBinaryHand1Paint.setAntiAlias(!mLowBitAmbient);
-                mBinaryHand0Paint.setAntiAlias(!mLowBitAmbient);
+                mBinary1Paint.setAntiAlias(!mLowBitAmbient);
+                mBinary0Paint.setAntiAlias(!mLowBitAmbient);
                 mBackgroundInnerPaint.setAntiAlias(!mLowBitAmbient);
                 mBackgroundOuterPaint.setAntiAlias(!mLowBitAmbient);
-                //mWatchHandShadowLinePaint.setAntiAlias(!mLowBitAmbient);
 
-                //mWatchHandShadowLinePaint.clearShadowLayer();
-                mBinaryHand0Paint.clearShadowLayer();
-                mBinaryHand1Paint.clearShadowLayer();
+                mBinary0Paint.clearShadowLayer();
+                mBinary1Paint.clearShadowLayer();
             } else {
                 mBackgroundInnerPaint.setColor(mBackgroundInnerColor);
                 mBackgroundOuterPaint.setColor(mBackgroundOuterColor);
-                mBinaryHand1Paint.setColor(mWatchBinary1Color);
-                mBinaryHand0Paint.setColor(mWatchBinary0Color);
+                mBinary1Paint.setColor(mWatchBinary1Color);
+                mBinary0Paint.setColor(mWatchBinary0Color);
 
-                mBinaryHand1Paint.setAntiAlias(true);
-                mBinaryHand0Paint.setAntiAlias(true);
+                mBinary1Paint.setAntiAlias(true);
+                mBinary0Paint.setAntiAlias(true);
                 mBackgroundInnerPaint.setAntiAlias(true);
                 mBackgroundOuterPaint.setAntiAlias(true);
-                //mWatchHandShadowLinePaint.setAntiAlias(true);
 
-                //mWatchHandShadowLinePaint.setShadowLayer(SHADOW_RADIUS, 0, 0, mWatchHandShadowColor);
-                mBinaryHand0Paint.setShadowLayer(SHADOW_RADIUS, 0, 0, mWatchHandShadowColor);
-                mBinaryHand1Paint.setShadowLayer(SHADOW_RADIUS, 0, 0, mWatchHandShadowColor);
+                mBinary0Paint.setShadowLayer(SHADOW_RADIUS, 0, 0, mWatchHandShadowColor);
+                mBinary1Paint.setShadowLayer(SHADOW_RADIUS, 0, 0, mWatchHandShadowColor);
             }
         }
 
@@ -440,8 +430,8 @@ public class BinaryAnalogWatchFaceService extends CanvasWatchFaceService {
             /* Dim display in mute mode. */
             if (mMuteMode != inMuteMode) {
                 mMuteMode = inMuteMode;
-                mBinaryHand1Paint.setAlpha(inMuteMode ? 100 : 255);
-                mBinaryHand0Paint.setAlpha(inMuteMode ? 100 : 255);
+                mBinary1Paint.setAlpha(inMuteMode ? 100 : 255);
+                mBinary0Paint.setAlpha(inMuteMode ? 100 : 255);
                 invalidate();
             }
         }
@@ -471,7 +461,6 @@ public class BinaryAnalogWatchFaceService extends CanvasWatchFaceService {
             int sizeOfComplication = width / 4;
             CENTER_COMPLICATION_CIRCLE_RADIUS = sizeOfComplication/2;
             mBinarySegmentSize = (mCenterX - CENTER_COMPLICATION_CIRCLE_RADIUS) / 10;
-            //mWatchHandShadowLinePaint.setStrokeWidth(mBinarySegmentSize);
             CENTER_HOUR_CIRCLE_RADIUS = CENTER_COMPLICATION_CIRCLE_RADIUS + mBinarySegmentSize * 4;
 
             Rect centerBounds =
@@ -524,9 +513,9 @@ public class BinaryAnalogWatchFaceService extends CanvasWatchFaceService {
             Paint[] binaryPaint = new Paint[bits];
             for (int i = 0; i < bits; i++) {
                 if ((num & (1<<i)) == 0) {
-                    binaryPaint[i] = mBinaryHand0Paint;
+                    binaryPaint[i] = mBinary0Paint;
                 } else {
-                    binaryPaint[i] = mBinaryHand1Paint;
+                    binaryPaint[i] = mBinary1Paint;
                 }
             }
             return binaryPaint;

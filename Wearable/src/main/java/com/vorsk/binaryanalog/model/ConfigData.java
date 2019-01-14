@@ -26,7 +26,7 @@ public class ConfigData {
     public static final String DEFAULT_BACKGROUND_COLOR = MaterialColors.Color.BLUE_GRAY.name();
     // best to choose complications that do not require the RECEIVE_COMPLICATION_DATA permission so they render on first load
     // https://developer.android.com/reference/android/support/wearable/complications/SystemProviders
-    public static final int[] DEFAULT_CENTER_COMPLICATION = {SystemProviders.DAY_AND_DATE,  ComplicationData.TYPE_SHORT_TEXT};
+    public static final int[] DEFAULT_CENTER_COMPLICATION = {SystemProviders.TIME_AND_DATE,  ComplicationData.TYPE_SHORT_TEXT};
 
     /**
      * Returns Watch Face Service class associated with configuration Activity.
