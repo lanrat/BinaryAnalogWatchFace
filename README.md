@@ -6,14 +6,16 @@ Inspired by [Anthony Liekens's](http://anthony.liekens.net/) [Analog Binary Wall
 
 ## Features
 
- * Material Color Pallet
+ * Material color themes
  * Customizable center complication
  * Watch face hands are made of binary digits representing current time
+ * Minimal design
+ * Open Source
 
 ## [Screenshots](Screenshots/)
 
-![BinaryAnalogWatchface](Screenshots/BinaryAnalog2.png)
+![Binary Analog Watch face](Screenshots/Screenshot_1547614024_framed.png)
 
-![BinaryAnalogWatchface Ambient](Screenshots/BinaryAnalog3.png)
+![Binary Analog Watch face Ambient](Screenshots/Screenshot_1547613908_framed.png)
 
-![BinaryAnalogWatchface](Screenshots/BinaryAnalog5.png)
+![Binary Analog Watch face](Screenshots/Screenshot_1547614121_framed.png)

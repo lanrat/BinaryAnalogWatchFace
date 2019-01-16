@@ -101,7 +101,8 @@ public class BinaryAnalogWatchFaceService extends CanvasWatchFaceService {
         private static final int MSG_UPDATE_TIME = 0;
 
         private float CENTER_COMPLICATION_CIRCLE_RADIUS;
-        private float CENTER_HOUR_CIRCLE_RADIUS;
+        private float CENTER_HOUR_RING_RADIUS;
+        private float CENTER_MINUTE_RING_RADIUS;
         final float BINARY_BIT_MARGIN = 2f;
 
         private static final int SHADOW_RADIUS = 3;
@@ -127,15 +128,15 @@ public class BinaryAnalogWatchFaceService extends CanvasWatchFaceService {
         private boolean mIsBackgroundDark;
 
         private int mWatchHandShadowColor;
-        private int mBackgroundInnerColor;
-        private int mBackgroundOuterColor;
+        private int mBackgroundColor;
+        private int mBackgroundRingColor;
         private int mWatchBinary0Color;
         private int mWatchBinary1Color;
 
         private Paint mBinary1Paint;
         private Paint mBinary0Paint;
-        private Paint mBackgroundInnerPaint;
-        private Paint mBackgroundOuterPaint;
+        private Paint mBackgroundPaint;
+        private Paint mBackgroundRingPaint;
         private MaterialColors.Color mBackgroundMaterialColor;
 
         private boolean mLowBitAmbient;
@@ -206,16 +207,20 @@ public class BinaryAnalogWatchFaceService extends CanvasWatchFaceService {
             String backgroundColorName = mSharedPref.getString(backgroundColorResourceName, ConfigData.DEFAULT_BACKGROUND_COLOR);
             mBackgroundMaterialColor = MaterialColors.Get(backgroundColorName);
 
-            mBackgroundInnerColor = mBackgroundMaterialColor.Color(500);
-            mBackgroundOuterColor = mBackgroundMaterialColor.Color(800);
+            mBackgroundColor = mBackgroundMaterialColor.Color(500);
+            mBackgroundRingColor = mBackgroundMaterialColor.Color(800);
 
             // Initialize background color (in case background complication is inactive).
-            mBackgroundInnerPaint = new Paint();
-            mBackgroundInnerPaint.setColor(mBackgroundInnerColor);
-            mBackgroundOuterPaint = new Paint();
-            mBackgroundOuterPaint.setColor(mBackgroundOuterColor);
+            mBackgroundPaint = new Paint();
+            mBackgroundPaint.setColor(mBackgroundColor);
+            mBackgroundRingPaint = new Paint();
+            mBackgroundRingPaint.setColor(mBackgroundRingColor);
+            mBackgroundRingPaint.setShadowLayer(SHADOW_RADIUS, 0, 0, mWatchHandShadowColor);
+            mBackgroundRingPaint.setStyle(Paint.Style.STROKE);
+            mBackgroundRingPaint.setStrokeWidth(mBinarySegmentSize * 4);
 
-            mIsBackgroundDark = MaterialColors.isColorDark(mBackgroundOuterColor);
+
+            mIsBackgroundDark = MaterialColors.isColorDark(mBackgroundRingColor);
 
             mWatchBinary1Color = getApplicationContext().getColor(R.color.binaryBit1);
             mWatchBinary0Color = getApplicationContext().getColor(R.color.binaryBit0);
@@ -394,28 +399,28 @@ public class BinaryAnalogWatchFaceService extends CanvasWatchFaceService {
 
         private void updateWatchPaintStyles() {
             if (mAmbient) {
-                mBackgroundInnerPaint.setColor(Color.BLACK);
-                mBackgroundOuterPaint.setColor(Color.BLACK);
+                mBackgroundPaint.setColor(Color.BLACK);
+                mBackgroundRingPaint.setColor(Color.BLACK);
                 mBinary0Paint.setColor(getApplicationContext().getColor(R.color.binaryBit0Ambient));
                 mBinary1Paint.setColor(getApplicationContext().getColor(R.color.binaryBit1Ambient));
 
                 mBinary1Paint.setAntiAlias(!mLowBitAmbient);
                 mBinary0Paint.setAntiAlias(!mLowBitAmbient);
-                mBackgroundInnerPaint.setAntiAlias(!mLowBitAmbient);
-                mBackgroundOuterPaint.setAntiAlias(!mLowBitAmbient);
+                mBackgroundPaint.setAntiAlias(!mLowBitAmbient);
+                mBackgroundRingPaint.setAntiAlias(!mLowBitAmbient);
 
                 mBinary0Paint.clearShadowLayer();
                 mBinary1Paint.clearShadowLayer();
             } else {
-                mBackgroundInnerPaint.setColor(mBackgroundInnerColor);
-                mBackgroundOuterPaint.setColor(mBackgroundOuterColor);
+                mBackgroundPaint.setColor(mBackgroundColor);
+                mBackgroundRingPaint.setColor(mBackgroundRingColor);
                 mBinary1Paint.setColor(mWatchBinary1Color);
                 mBinary0Paint.setColor(mWatchBinary0Color);
 
                 mBinary1Paint.setAntiAlias(true);
                 mBinary0Paint.setAntiAlias(true);
-                mBackgroundInnerPaint.setAntiAlias(true);
-                mBackgroundOuterPaint.setAntiAlias(true);
+                mBackgroundPaint.setAntiAlias(true);
+                mBackgroundRingPaint.setAntiAlias(true);
 
                 mBinary0Paint.setShadowLayer(SHADOW_RADIUS, 0, 0, mWatchHandShadowColor);
                 mBinary1Paint.setShadowLayer(SHADOW_RADIUS, 0, 0, mWatchHandShadowColor);
@@ -461,7 +466,8 @@ public class BinaryAnalogWatchFaceService extends CanvasWatchFaceService {
             int sizeOfComplication = width / 4;
             CENTER_COMPLICATION_CIRCLE_RADIUS = sizeOfComplication/2;
             mBinarySegmentSize = (mCenterX - CENTER_COMPLICATION_CIRCLE_RADIUS) / 10;
-            CENTER_HOUR_CIRCLE_RADIUS = CENTER_COMPLICATION_CIRCLE_RADIUS + mBinarySegmentSize * 4;
+            CENTER_HOUR_RING_RADIUS = CENTER_COMPLICATION_CIRCLE_RADIUS + mBinarySegmentSize * 2;
+            CENTER_MINUTE_RING_RADIUS = CENTER_HOUR_RING_RADIUS + mBinarySegmentSize * 2;
 
             Rect centerBounds =
                     // Left, Top, Right, Bottom
@@ -490,9 +496,8 @@ public class BinaryAnalogWatchFaceService extends CanvasWatchFaceService {
             if (mAmbient && (mLowBitAmbient || mBurnInProtection)) {
                 canvas.drawColor(Color.BLACK);
             } else {
-                canvas.drawColor(mBackgroundInnerPaint.getColor());
-                canvas.drawCircle(mCenterX, mCenterY, CENTER_HOUR_CIRCLE_RADIUS, mBackgroundOuterPaint);
-                canvas.drawCircle(mCenterX, mCenterY, CENTER_COMPLICATION_CIRCLE_RADIUS, mBackgroundInnerPaint);
+                canvas.drawColor(mBackgroundPaint.getColor());
+                canvas.drawCircle(mCenterX, mCenterY, CENTER_HOUR_RING_RADIUS, mBackgroundRingPaint);
             }
         }
 
@@ -542,6 +547,7 @@ public class BinaryAnalogWatchFaceService extends CanvasWatchFaceService {
              * These calculations reflect the rotation in degrees per unit of time, e.g.,
              * 360 / 60 = 6 and 360 / 12 = 30.
              */
+            //mCalendar.set(2019,01,07,3,32,00); // for testing and screenshots
             final float minuteHandOffset = mCalendar.get(Calendar.SECOND) / 10f;
             final int minute = mCalendar.get(Calendar.MINUTE);
             final float minutesRotation = minute * 6f + minuteHandOffset;
@@ -561,7 +567,7 @@ public class BinaryAnalogWatchFaceService extends CanvasWatchFaceService {
 
             // minutes
             canvas.rotate(minutesRotation - hoursRotation, mCenterX, mCenterY);
-            drawBinaryLine(canvas, mCenterX, mCenterY - CENTER_HOUR_CIRCLE_RADIUS, minute, 6);
+            drawBinaryLine(canvas, mCenterX, mCenterY - CENTER_MINUTE_RING_RADIUS, minute, 6);
 
             /* Restore the canvas' original orientation. */
             canvas.restore();
