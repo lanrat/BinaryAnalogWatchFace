@@ -18,10 +18,10 @@ Inspired by [Anthony Liekens's](http://anthony.liekens.net/) [Analog Binary Wall
  * Minimal design
  * Open Source
 
-## [Screenshots](Screenshots/)
+## [Screenshots](art/framed/)
 
-![Binary Analog Watch face](Screenshots/Screenshot_1547614024_framed.png)
+![Binary Analog Watch face](art/framed/blue.png)
 
-![Binary Analog Watch face Ambient](Screenshots/Screenshot_1547613908_framed.png)
+![Binary Analog Watch face Ambient](art/framed/ambient.png)
 
-![Binary Analog Watch face](Screenshots/Screenshot_1547614121_framed.png)
+![Binary Analog Watch face](art/framed/orange.png)
