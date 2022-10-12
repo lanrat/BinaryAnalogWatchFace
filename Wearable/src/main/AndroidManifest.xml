@@ -50,7 +50,7 @@
         <activity
             android:name="com.vorsk.binaryanalog.config.ConfigActivity"
             android:label="@string/complication_config"
-            android:exported="false">
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.vorsk.binaryanalog.watchface.CONFIG_COMPLICATION" />
 
