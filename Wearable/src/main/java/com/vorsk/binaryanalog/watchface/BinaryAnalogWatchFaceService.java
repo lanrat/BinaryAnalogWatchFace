@@ -154,9 +154,9 @@ public class BinaryAnalogWatchFaceService extends CanvasWatchFaceService {
         private boolean mAmbient;
         // Handler to update the time once a second in interactive mode.
         private final Handler mUpdateTimeHandler =
-                new Handler() {
+                new Handler(new Handler.Callback() {
                     @Override
-                    public void handleMessage(Message message) {
+                    public boolean handleMessage(Message message) {
                         invalidate();
                         if (shouldTimerBeRunning()) {
                             long timeMs = System.currentTimeMillis();
@@ -165,8 +165,9 @@ public class BinaryAnalogWatchFaceService extends CanvasWatchFaceService {
                                             - (timeMs % INTERACTIVE_UPDATE_RATE_MS);
                             mUpdateTimeHandler.sendEmptyMessageDelayed(MSG_UPDATE_TIME, delayMs);
                         }
+                        return false;
                     }
-                };
+                });
 
 
         @Override
@@ -464,7 +465,7 @@ public class BinaryAnalogWatchFaceService extends CanvasWatchFaceService {
 
             // For most Wear devices, width and height are the same, so we just chose one (width).
             int sizeOfComplication = width / 4;
-            CENTER_COMPLICATION_CIRCLE_RADIUS = sizeOfComplication/2;
+            CENTER_COMPLICATION_CIRCLE_RADIUS = ((float)sizeOfComplication)/2.0f;
             mBinarySegmentSize = (mCenterX - CENTER_COMPLICATION_CIRCLE_RADIUS) / 10;
             CENTER_HOUR_RING_RADIUS = CENTER_COMPLICATION_CIRCLE_RADIUS + mBinarySegmentSize * 2;
             CENTER_MINUTE_RING_RADIUS = CENTER_HOUR_RING_RADIUS + mBinarySegmentSize * 2;

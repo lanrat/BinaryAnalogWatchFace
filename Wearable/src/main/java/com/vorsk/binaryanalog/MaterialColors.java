@@ -1,5 +1,7 @@
 package com.vorsk.binaryanalog;
 
+import android.annotation.SuppressLint;
+
 public class MaterialColors {
 
     public static final int A100 = 10;
@@ -31,6 +33,7 @@ public class MaterialColors {
     private static final int[] limePalette = {0xF9FBE7, 0xF0F4C3, 0xE6EE9C, 0xDCE775, 0xD4E157, 0xCDDC39, 0xC0CA33, 0xA4B42B, 0x9E9D24, 0x827717, 0xF4FF81, 0xEEFF41, 0xC6FF00, 0xAEEA00};
     private static final int[] lightGreenPalette = {0xF1F8E9, 0xDCEDC8, 0xC5E1A5, 0xAED581, 0x9CCC65, 0x8BC34A, 0x7CB342, 0x689F38, 0x558B2F, 0x33691E, 0xCCFF90, 0xB2FF59, 0x76FF03, 0x64DD17};
 
+    @SuppressLint("NotConstructor")
     public enum Color
     {
         RED,

@@ -1,8 +1,8 @@
 package com.vorsk.binaryanalog.model;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.RecyclerView.ViewHolder;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import android.support.wearable.complications.ComplicationData;
 import android.support.wearable.complications.SystemProviders;
 
@@ -73,8 +73,8 @@ public class ConfigData {
      */
     public static class ComplicationsConfigItem implements ConfigItemType {
 
-        private int defaultComplicationResourceId;
-        private int defaultAddedComplicationResourceId;
+        private final int defaultComplicationResourceId;
+        private final int defaultAddedComplicationResourceId;
 
         ComplicationsConfigItem(int defaultComplicationResourceId,
                                 int defaultAddedComplicationResourceId) {
@@ -103,10 +103,10 @@ public class ConfigData {
      */
     public static class ColorConfigItem implements ConfigItemType {
 
-        private String name;
-        private int iconResourceId;
-        private String sharedPrefString;
-        private Class<ColorSelectionActivity> activityToChoosePreference;
+        private final String name;
+        private final int iconResourceId;
+        private final String sharedPrefString;
+        private final Class<ColorSelectionActivity> activityToChoosePreference;
 
         ColorConfigItem(
                 String name,
